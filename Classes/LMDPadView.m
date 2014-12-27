@@ -23,93 +23,39 @@
     SISetControllerReleaseButton(SI_BUTTON_DOWN);
     return;
   }
+
+  CGPoint location = [touch locationInView:self];
+  CGSize imageSize = self.image.size;
+  CGSize viewSize = self.bounds.size;
+  
+  CGSize thirdImageSize = CGSizeMake(imageSize.width / 3.0f, imageSize.height / 3.0f);
+  
+  CGRect centerSquareRect = CGRectMake(((viewSize.width - imageSize.width) / 2.0f) + thirdImageSize.width,
+                                       ((viewSize.height - imageSize.height) / 2.0f) + thirdImageSize.height,
+                                       thirdImageSize.width,
+                                       thirdImageSize.height);
+  
+  //For the middle area, just continue pressing what buttons were pressed before
+  if (CGRectContainsPoint(centerSquareRect, location)) {
+    return;
+  }
+  
   SISetControllerReleaseButton(SI_BUTTON_UP);
   SISetControllerReleaseButton(SI_BUTTON_LEFT);
   SISetControllerReleaseButton(SI_BUTTON_RIGHT);
   SISetControllerReleaseButton(SI_BUTTON_DOWN);
-  CGPoint location = [touch locationInView:self];
-  if(location.x < 50)
-  {
-    if(location.y < 50)
-    {
-      SISetControllerPushButton(SI_BUTTON_UP);
-      SISetControllerPushButton(SI_BUTTON_LEFT);
-    }
-    else if(location.y < 100)
-      SISetControllerPushButton(SI_BUTTON_LEFT);
-    else
-    {
-      SISetControllerPushButton(SI_BUTTON_DOWN);
-      SISetControllerPushButton(SI_BUTTON_LEFT);
-    }
+  
+  if (location.x < CGRectGetMinX(centerSquareRect)) {
+    SISetControllerPushButton(SI_BUTTON_LEFT);
   }
-  else if(location.x < 100)
-  {
-    if(location.y < 50)
-      SISetControllerPushButton(SI_BUTTON_UP);
-    else if(location.y > 100)
-      SISetControllerPushButton(SI_BUTTON_DOWN);
-    else
-    {
-      // inside the middle square things get "tricky"
-      int x = location.x-75;
-      int y = location.y-75;
-      if(x > 0)
-      {
-        // right or up or down
-        if(y > 0)
-        {
-          // right or down
-          if(x > y)
-            SISetControllerPushButton(SI_BUTTON_RIGHT);
-          else
-            SISetControllerPushButton(SI_BUTTON_DOWN);
-        }
-        else
-        {
-          // right or up
-          if(x > -y)
-            SISetControllerPushButton(SI_BUTTON_RIGHT);
-          else
-            SISetControllerPushButton(SI_BUTTON_UP);
-        }
-      }
-      else
-      {
-        // left or up or down
-        if(y > 0)
-        {
-          // left or down
-          if(-x > y)
-            SISetControllerPushButton(SI_BUTTON_LEFT);
-          else
-            SISetControllerPushButton(SI_BUTTON_DOWN);
-        }
-        else
-        {
-          // left or up
-          if(-x > -y)
-            SISetControllerPushButton(SI_BUTTON_LEFT);
-          else
-            SISetControllerPushButton(SI_BUTTON_UP);
-        }
-      }
-    }
+  if (location.x > CGRectGetMaxX(centerSquareRect)) {
+    SISetControllerPushButton(SI_BUTTON_RIGHT);
   }
-  else
-  {
-    if(location.y < 50)
-    {
-      SISetControllerPushButton(SI_BUTTON_UP);
-      SISetControllerPushButton(SI_BUTTON_RIGHT);
-    }
-    else if(location.y < 100)
-      SISetControllerPushButton(SI_BUTTON_RIGHT);
-    else
-    {
-      SISetControllerPushButton(SI_BUTTON_DOWN);
-      SISetControllerPushButton(SI_BUTTON_RIGHT);
-    }
+  if (location.y < CGRectGetMinY(centerSquareRect)) {
+    SISetControllerPushButton(SI_BUTTON_UP);
+  }
+  if (location.y > CGRectGetMaxY(centerSquareRect)) {
+    SISetControllerPushButton(SI_BUTTON_DOWN);
   }
 }
 
