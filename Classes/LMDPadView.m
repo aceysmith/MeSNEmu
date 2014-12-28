@@ -118,7 +118,8 @@ typedef NS_OPTIONS(NSUInteger, LMDPadViewDirection) {
   if(self)
   {
     self.userInteractionEnabled = YES;
-    
+    self.layer.zPosition = 1000.0f;
+
     self.image = [UIImage imageNamed:@"ButtonDPad.png"];
     self.contentMode = UIViewContentModeCenter;
   }

@@ -52,6 +52,8 @@
   if(self)
   {
     self.userInteractionEnabled = YES;
+    self.layer.zPosition = 1000.0f;
+    
     //self.backgroundColor = [UIColor whiteColor];
     self.contentMode = UIViewContentModeCenter;
     

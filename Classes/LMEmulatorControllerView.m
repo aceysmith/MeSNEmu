@@ -281,6 +281,7 @@
   int smallButtonsOriginX = 0;
   int smallButtonsOriginY = 0;
   int smallButtonsSpacing = 5;
+  CGSize smallButtonSize = CGSizeMake(44.0f, 24.0f);
   BOOL smallButtonsVertical = YES;
   float controlsAlpha = 1;
   if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -301,8 +302,8 @@
       int dpadHeight = _dPadView.image.size.height;
       screenBorderY = size.height*0.5-dpadHeight*0.5;
       smallButtonsVertical = NO;
-      smallButtonsOriginY = size.height-smallButtonsSpacing-_startButton.image.size.height;
-      smallButtonsOriginX = size.width*0.5-_startButton.image.size.width*1.5-smallButtonsSpacing;
+      smallButtonsOriginY = size.height-smallButtonsSpacing-smallButtonSize.height;
+      smallButtonsOriginX = size.width*0.5-smallButtonSize.width*1.5-smallButtonsSpacing;
     }
     else
     {
@@ -322,7 +323,7 @@
         else
         {
           smallButtonsVertical = YES;
-          smallButtonsOriginX = (size.width-_startButton.frame.size.width)/2;
+          smallButtonsOriginX = (size.width-smallButtonSize.width)/2;
           smallButtonsOriginY = size.height-_dPadView.image.size.height;
         }
       }
@@ -333,14 +334,14 @@
         {
           screenOffsetY = (int)((size.width-width)/4);
           smallButtonsVertical = NO;
-          smallButtonsOriginX = (size.width-(_startButton.frame.size.width*3+smallButtonsSpacing*2))/2;
+          smallButtonsOriginX = (size.width-(smallButtonSize.width*3+smallButtonsSpacing*2))/2;
           smallButtonsOriginY = screenOffsetY+height+smallButtonsSpacing;
         }
         else
         {
           screenOffsetY = -2;
           smallButtonsVertical = YES;
-          smallButtonsOriginX = (size.width-_startButton.frame.size.width)/2;
+          smallButtonsOriginX = (size.width-smallButtonSize.width)/2;
           smallButtonsOriginY = size.height-_dPadView.image.size.height;
         }
       }
@@ -357,8 +358,8 @@
       int dpadHeight = _dPadView.image.size.height;
       screenBorderY = size.height*0.5-dpadHeight*0.5;
       smallButtonsVertical = NO;
-      smallButtonsOriginY = size.height-smallButtonsSpacing-_startButton.image.size.height;
-      smallButtonsOriginX = size.width*0.5-_startButton.image.size.width*1.5-smallButtonsSpacing;
+      smallButtonsOriginY = size.height-smallButtonsSpacing-smallButtonSize.height;
+      smallButtonsOriginX = size.width*0.5-smallButtonSize.width*1.5-smallButtonsSpacing;
       if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         screenBorderX = 30;
     }
@@ -374,7 +375,7 @@
         width = (int)(height/(double)originalHeight*originalWidth);
         
         smallButtonsVertical = YES;
-        smallButtonsOriginX = ((size.width-width)/2-_startButton.frame.size.width)/2;
+        smallButtonsOriginX = ((size.width-width)/2-smallButtonSize.width)/2;
         smallButtonsOriginY = smallButtonsOriginX;
         
         if(_hideUI == NO)
@@ -390,14 +391,14 @@
         if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         {
           smallButtonsVertical = YES;
-          smallButtonsOriginX = ((size.width-width)/2-_startButton.frame.size.width)/2;
+          smallButtonsOriginX = ((size.width-width)/2-smallButtonSize.width)/2;
           smallButtonsOriginY = smallButtonsOriginX;
         }
         else
         {
           screenOffsetY = -2;
           smallButtonsVertical = YES;
-          smallButtonsOriginX = (size.width-_startButton.frame.size.width)/2;
+          smallButtonsOriginX = (size.width-smallButtonSize.width)/2;
           smallButtonsOriginY = size.height-_dPadView.image.size.height;
         }
       }
@@ -434,7 +435,6 @@
   // start, select, menu buttons
   int xOffset = 0;
   int yOffset = 0;
-  CGSize smallButtonSize = CGSizeMake(44.0f, 24.0f);
   if(smallButtonsVertical == YES)
     yOffset = smallButtonSize.height+smallButtonsSpacing;
   else
