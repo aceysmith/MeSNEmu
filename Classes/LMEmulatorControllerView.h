@@ -37,6 +37,7 @@ typedef enum _LMEmulatorControllerViewMode
   // start / select
   LMButtonView* _startButton;
   LMButtonView* _selectButton;
+  LMButtonView* _optionsButton;
   // buttons
   LMButtonView* _aButton;
   LMButtonView* _bButton;
@@ -50,14 +51,12 @@ typedef enum _LMEmulatorControllerViewMode
   // external controller
   LMBTControllerView* _iCadeControlView;
   
-  UIButton* _optionsButton;
-  
   BOOL _hideUI;
   
   LMEmulatorControllerViewMode _viewMode;
 }
 
-@property (readonly) UIButton* optionsButton;
+@property (readonly) LMButtonView* optionsButton;
 @property (readonly) LMBTControllerView* iCadeControlView;
 @property (nonatomic) LMEmulatorControllerViewMode viewMode;
 

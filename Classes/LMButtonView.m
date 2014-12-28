@@ -15,10 +15,21 @@
 - (void)handleTouches:(NSSet*)touches
 {
   UITouch* touch = [touches anyObject];
-  if(touch.phase == UITouchPhaseCancelled || touch.phase == UITouchPhaseEnded || touch == nil)
-    SISetControllerReleaseButton(_button);
-  else
-    SISetControllerPushButton(_button);
+  if(touch.phase == UITouchPhaseCancelled || touch.phase == UITouchPhaseEnded || touch == nil) {
+    self.layer.transform = CATransform3DIdentity;
+    if (_button) {
+      SISetControllerReleaseButton(_button);
+    }
+    if ([_delegate respondsToSelector:@selector(buttonViewTapped:)]) {
+      [_delegate buttonViewTapped:self];
+    }
+  }
+  else {
+    self.layer.transform = CATransform3DMakeScale(0.95f, 0.95f, 1.0f);
+    if (_button) {
+      SISetControllerPushButton(_button);
+    }
+  }
 }
 
 @end
@@ -27,6 +38,7 @@
 
 @synthesize button = _button;
 @synthesize label = _label;
+@synthesize delegate = _delegate;
 
 @end
 

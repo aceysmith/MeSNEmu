@@ -478,6 +478,10 @@ typedef enum _LMEmulatorAlert
 
 #pragma mark -
 
+@interface LMEmulatorController () <LMButtonViewDelegate>
+
+@end
+
 @implementation LMEmulatorController
 
 @synthesize romFileName = _romFileName;
@@ -509,6 +513,13 @@ typedef enum _LMEmulatorAlert
   return self;
 }
 
+- (void)buttonViewTapped:(LMButtonView *)buttonView
+{
+  if (buttonView == _customView.optionsButton) {
+    [self LM_options:nil];
+  }
+}
+
 @end
 
 #pragma mark -
@@ -519,7 +530,7 @@ typedef enum _LMEmulatorAlert
 {
   _customView = [[LMEmulatorControllerView alloc] initWithFrame:CGRectZero];
   _customView.iCadeControlView.delegate = self;
-  [_customView.optionsButton addTarget:self action:@selector(LM_options:) forControlEvents:UIControlEventTouchUpInside];
+  _customView.optionsButton.delegate = self;
   self.view = _customView;
 }
 

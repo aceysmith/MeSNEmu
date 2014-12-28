@@ -29,10 +29,7 @@
 
 - (LMButtonView*)LM_smallButtonWithButton:(int)buttonMap
 {
-  int width = 44;
-  int height = 24;
-  
-  LMButtonView* button = [[LMButtonView alloc] initWithFrame:(CGRect){0,0, width,height}];
+  LMButtonView* button = [[LMButtonView alloc] initWithFrame:(CGRect){0,0, 44.0f, 24.0f}];
   button.image = [UIImage imageNamed:@"ButtonWide.png"];
   button.label.textColor = [UIColor colorWithWhite:1 alpha:0.75];
   button.label.shadowColor = [UIColor colorWithWhite:0 alpha:0.35];
@@ -48,11 +45,7 @@
 
 - (LMButtonView*)LM_buttonWithButton:(int)buttonMap
 {
-  int side = 50;
-  side = 60;
-  if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-    side = 70;
-  LMButtonView* button = [[LMButtonView alloc] initWithFrame:(CGRect){0,0, side,side}];
+  LMButtonView* button = [[LMButtonView alloc] initWithFrame:(CGRect){0,0, 60, 60}];
   button.button = buttonMap;
   button.label.font = [UIFont boldSystemFontOfSize:27.0];
   if(buttonMap == SI_BUTTON_A || buttonMap == SI_BUTTON_B)
@@ -97,7 +90,6 @@
 
 @implementation LMEmulatorControllerView
 
-@synthesize optionsButton = _optionsButton;
 @synthesize iCadeControlView = _iCadeControlView;
 @synthesize viewMode = _viewMode;
 - (void)setViewMode:(LMEmulatorControllerViewMode)viewMode
@@ -183,21 +175,15 @@
     _screenView.userInteractionEnabled = NO;
     [self addSubview:_screenView];
     
-    // start / select buttons
+    // start / select / options buttons
     _startButton = [[self LM_smallButtonWithButton:SI_BUTTON_START] retain];
     [self addSubview:_startButton];
     
     _selectButton = [[self LM_smallButtonWithButton:SI_BUTTON_SELECT] retain];
     [self addSubview:_selectButton];
     
-    // menu button
-    _optionsButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-    [_optionsButton setBackgroundImage:[UIImage imageNamed:@"ButtonWide.png"] forState:UIControlStateNormal];
-    [_optionsButton setTitle:NSLocalizedString(@"MENU", nil) forState:UIControlStateNormal];
-    [_optionsButton setTitleColor:[UIColor colorWithWhite:1 alpha:0.75] forState:UIControlStateNormal];
-    [_optionsButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.35] forState:UIControlStateNormal];
-    _optionsButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
-    _optionsButton.titleLabel.font = [UIFont systemFontOfSize:10];
+    _optionsButton = [[self LM_smallButtonWithButton:0] retain];
+    _optionsButton.label.text = NSLocalizedString(@"MENU", nil);
     [self addSubview:_optionsButton];
     
     // ABXY buttons
@@ -448,13 +434,14 @@
   // start, select, menu buttons
   int xOffset = 0;
   int yOffset = 0;
+  CGSize smallButtonSize = CGSizeMake(44.0f, 24.0f);
   if(smallButtonsVertical == YES)
-    yOffset = _startButton.frame.size.height+smallButtonsSpacing;
+    yOffset = smallButtonSize.height+smallButtonsSpacing;
   else
-    xOffset = _startButton.frame.size.width+smallButtonsSpacing;
-  _startButton.frame = (CGRect){smallButtonsOriginX,smallButtonsOriginY, _startButton.frame.size};
-  _selectButton.frame = (CGRect){smallButtonsOriginX+xOffset,smallButtonsOriginY+yOffset, _selectButton.frame.size};
-  _optionsButton.frame = (CGRect){smallButtonsOriginX+2*xOffset,smallButtonsOriginY+2*yOffset, _selectButton.frame.size};
+    xOffset = smallButtonSize.width+smallButtonsSpacing;
+  _startButton.frame = (CGRect){smallButtonsOriginX,smallButtonsOriginY, smallButtonSize};
+  _selectButton.frame = (CGRect){smallButtonsOriginX+xOffset,smallButtonsOriginY+yOffset, smallButtonSize};
+  _optionsButton.frame = (CGRect){smallButtonsOriginX+2*xOffset,smallButtonsOriginY+2*yOffset, smallButtonSize};
   
   if(_viewMode == LMEmulatorControllerViewModeScreenOnly)
   {
@@ -470,20 +457,23 @@
   }
   
   // layout buttons
-  int buttonSize = _aButton.frame.size.width;
-  _aButton.frame = (CGRect){size.width-buttonSize-screenBorderX, size.height-buttonSize-screenBorderY, _aButton.frame.size};
+  
+  int buttonWidth = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 70 : 60;
+  CGSize buttonSize = CGSizeMake(buttonWidth, buttonWidth);
+
+  _aButton.frame = (CGRect){size.width-buttonWidth-screenBorderX, size.height-buttonWidth-screenBorderY, buttonSize};
   _aButton.alpha = controlsAlpha;
-  _bButton.frame = (CGRect){size.width-buttonSize*2-screenBorderX-buttonSpacing, size.height-buttonSize-screenBorderY, _bButton.frame.size};
+  _bButton.frame = (CGRect){size.width-buttonWidth*2-screenBorderX-buttonSpacing, size.height-buttonWidth-screenBorderY, buttonSize};
   _bButton.alpha = controlsAlpha;
-  _xButton.frame = (CGRect){size.width-buttonSize-screenBorderX, size.height-buttonSize*2-screenBorderY-buttonSpacing, _xButton.frame.size};
+  _xButton.frame = (CGRect){size.width-buttonWidth-screenBorderX, size.height-buttonWidth*2-screenBorderY-buttonSpacing, buttonSize};
   _xButton.alpha = controlsAlpha;
-  _yButton.frame = (CGRect){size.width-buttonSize*2-screenBorderX-buttonSpacing, size.height-buttonSize*2-screenBorderY-buttonSpacing, _yButton.frame.size};
+  _yButton.frame = (CGRect){size.width-buttonWidth*2-screenBorderX-buttonSpacing, size.height-buttonWidth*2-screenBorderY-buttonSpacing, buttonSize};
   _yButton.alpha = controlsAlpha;
   
   _lButton.alpha = controlsAlpha;
-  _lButton.frame = (CGRect){size.width-buttonSize*2-screenBorderX-buttonSpacing, size.height-buttonSize*3-screenBorderY-buttonSpacing, _yButton.frame.size};
+  _lButton.frame = (CGRect){size.width-buttonWidth*2-screenBorderX-buttonSpacing, size.height-buttonWidth*3-screenBorderY-buttonSpacing, buttonSize};
   _rButton.alpha = controlsAlpha;
-  _rButton.frame = (CGRect){size.width-buttonSize-screenBorderX, size.height-buttonSize*3-screenBorderY-buttonSpacing, _xButton.frame.size};
+  _rButton.frame = (CGRect){size.width-buttonWidth-screenBorderX, size.height-buttonWidth*3-screenBorderY-buttonSpacing, buttonSize};
   
   // layout d-pad
   _dPadView.frame = (CGRect){screenBorderX,size.height-_dPadView.image.size.height-screenBorderY, _dPadView.image.size};
